@@ -154,14 +154,7 @@ TEST_CASE("Test 13- SmartTeam")
     t2.add(&n4);
 
     t1.attack(&t2);
-    // for (auto& f : t1.get_fighters())
-    // {
-    //     CHECK(f.isAlive() == true);
-    // }
-    // for (auto& f : t2.get_fighters())
-    // {
-    //     CHECK(f.isAlive() == false);
-    // }
+   
 }
 TEST_CASE("Test 14- Team2")
 {
@@ -181,10 +174,7 @@ TEST_CASE("Test 14- Team2")
 
     t1.attack(&t2);
     CHECK(t1.get_leader()->getName() == "n1");
-    // for (auto& f : t1.get_fighters())
-    // {
-    //     CHECK(f.isAlive() == true);
-    // }
+ 
 }
 TEST_CASE("Test 15- attack")
 {
@@ -282,8 +272,50 @@ TEST_CASE("Test 20- slash to far")
     Point p2(33, 42);
     YoungNinja n2("n2", p2);
     CHECK(n2.get_Hit_points() == 100);
+    n1.slash(&n2);
     CHECK(n2.get_Hit_points() == 100);
+    CHECK(n1.get_Hit_points() == 150);
+    n2.slash(&n1);
+    CHECK(n1.get_Hit_points() == 150);
 }
+TEST_CASE("Test 21- Game test")
+{
+    Point p1(1, 2);
+    OldNinja n1("n1", p1);
+    Point p2(33.5, 49.2);
+    YoungNinja n2("n2", p2);
+    double d = n1.distance(n2);
+    double d2 = n2.distance(n1);
+    CHECK(d == d2);
+    while (n2.isAlive() )
+    {
+        n1.move(&n2);
+        n1.slash(&n2);
+    }
+    CHECK_NOTHROW(n1.move(&n2));
+    CHECK_NOTHROW(n1.slash(&n2));
+}
+TEST_CASE("Test 22- Team aginst one")
+{
+     Point a(32.3,44),b(1.3,3.5);
+    Cowboy *roni = new Cowboy("Roni", a);
+    OldNinja *Enamy = new OldNinja("Enamy", b);
+    Team team_A(roni); 
+    team_A.add(new YoungNinja("Yogi", Point(64,57)));
+     Team team_B(Enamy);
+     team_B.add(new TrainedNinja("Hikari", Point(12,81)));
+     while(team_A.stillAlive() > 0 && team_B.stillAlive() > 0){
+        team_A.attack(&team_B);
+        team_B.attack(&team_A);
+        team_A.print();
+        team_B.print();
+     }
+        CHECK(team_A.stillAlive() == 0);
+        CHECK(team_B.stillAlive() >= 1);
+        CHECK_NOTHROW(team_A.attack(&team_B));
+        CHECK_NOTHROW(team_B.attack(&team_A));
+}
+
 
 
 

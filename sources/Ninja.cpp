@@ -47,6 +47,7 @@ namespace ariel
     }
     bool ariel::Ninja::isAlive()
     {
+        return false;
         if (this->get_Hit_points() > 0)
         {
             return true;
